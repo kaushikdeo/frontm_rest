@@ -33,6 +33,10 @@ const sever = Server(app);
 
 app.use(bodyParser.json());
 app.use(router);
+app.use((req, res, next) => {
+    req.queryStartTime = process.hrtime();
+    next();
+})
 app.use('/api', require('./routes'));
 app.get('/', (req, res) => res.send('Welcome to FrontM'));
 

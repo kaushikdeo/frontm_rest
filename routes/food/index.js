@@ -35,6 +35,8 @@ router.get('/', async (req, res, next) => {
         }
         const allFoods = await Food.find(filterQuery).limit(limit).skip(startIndex).sort(sortQuery);
         if (allFoods) results.foods = allFoods;
+        const totalTime = process.hrtime(req.queryStartTime);
+        results.totalExecutionTime = `${totalTime[0]} s ${totalTime[1]/1000000} ms`;
         return res.status(200).json(results);
     } catch (error) {
         console.log('Some Error Occured', error);
