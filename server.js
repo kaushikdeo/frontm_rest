@@ -1,7 +1,8 @@
-import express from 'express';
-import { Server } from 'http';
-import mongoose from 'mongoose';
-import bodyParser from 'body-parser';
+const express = require('express');
+const { Server } = require('http');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+
 
 const app = express();
 const router = express.Router();
@@ -13,7 +14,7 @@ const sever = Server(app);
 
 app.use(bodyParser.json());
 app.use(router);
-
+app.use('/api', require('./routes'));
 app.get('/', (req, res) => res.send('Welcome to FrontM'));
 
 sever.listen(PORT, () => {
