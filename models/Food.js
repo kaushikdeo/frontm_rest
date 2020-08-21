@@ -1,4 +1,6 @@
-const {Schema} = require('mongoose');
+const {Schema, SchemaTypes, model} = require('mongoose');
+const uuid = require('uuid/v4');
+
 
 const FoodSchema = new Schema({
     itemName: {
@@ -20,7 +22,7 @@ const FoodSchema = new Schema({
     inventory: {
         type: Number,
         required: true,
-    },
-});
+    }
+}, {timestamps: true})
 
-module.exports = ('Food', FoodSchema);
+module.exports = model('Food', FoodSchema);

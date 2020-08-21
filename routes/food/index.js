@@ -1,7 +1,13 @@
 const router = require('express').Router();
+const Food = require('../../models/Food');
 
-router.get('/', (req, res, next) => {
-    res.status(200).json({message: 'this is the food api endpoint'});
+router.get('/', async (req, res, next) => {
+    try {
+        const allFoods = await Food.find();
+        return res.status(200).json(allFoods);
+    } catch (error) {
+        
+    }
 })
 
 module.exports = router;
