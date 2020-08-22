@@ -1,5 +1,7 @@
 const router = require('express').Router();
+const mongoose = require('mongoose');
 const Food = require('../../models/Food');
+const validator = require('validator');
 
 router.get('/', async (req, res, next) => {
     try {
@@ -39,8 +41,40 @@ router.get('/', async (req, res, next) => {
         results.totalExecutionTime = `${totalTime[0]} s ${totalTime[1]/1000000} ms`;
         return res.status(200).json(results);
     } catch (error) {
-        console.log('Some Error Occured', error);
-        return res.status(500).json({error: true, message: "Error occured while counting Entries"});
+        console.log('Some Server Error Occured', error);
+        return res.status(500).json({error: true, message: "Error occured while fetching Entries"});
+    }
+})
+
+router.post('/', async (req, res, next) => {
+    if (!req.body) {
+        return res.status(400).json({messgae: 'Invalid input fields'});
+    }
+    const itemName = validator.escape(req.body.itemName);
+    const foodType = validator.escape(req.body.foodType);
+    const cusineType = validator.escape(req.body.cusineType);
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+        const food = new Food({
+            itemName,
+            cost: req.body.cost,
+            foodType,
+            cusineType,
+            inventory: req.body.inventory,
+        }, { _id: true, session });
+        const savedFood = await food.save();
+        if (savedFood) {
+            await session.commitTransaction();
+            session.endSession();
+            const totalTime = process.hrtime(req.queryStartTime);
+            return res.status(200).json({error: false, savedFood, totalExecutionTime: `${totalTime[0]} s ${totalTime[1]/1000000} ms`});
+        }
+    } catch (error) {
+        await session.abortTransaction();
+        session.endSession();
+        console.log('error while saving food item', err);
+        return res.status(500).json({error: true, message: 'Error occured while saving new food item'});
     }
 })
 
