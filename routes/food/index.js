@@ -11,15 +11,26 @@ router.get('/', async (req, res, next) => {
         const endIndex = page * limit;
         const sortBy = req.query.sortBy ? req.query.sortBy.toString() : 'itemName' ;
         const orderBy = Number(req.query.orderBy) === 1 ? 1 : -1;
+        const costMin = req.query.costMin;
+        const costMax = req.query.costMax;
         const filterString = req.query.filter ? req.query.filter.toString() : '';
         const results = {error: false};
         const sortQuery = {
             [sortBy]: orderBy,
         };
-        const filterQuery = {
-            itemName: new RegExp(filterString, 'i')
+        let filterQuery = {};
+        if (costMax && costMin) {
+            filterQuery = {
+                itemName: new RegExp(filterString, 'i'),
+                cost: { $gte:costMin, $lte: costMax }
+            }
+        } else {
+            filterQuery = {
+                itemName: new RegExp(filterString, 'i')
+            }
         }
-        const foodsLength = await Food.countDocuments().exec();
+        console.log('filterQuery', filterQuery);
+        const foodsLength = await Food.countDocuments(filterQuery);
         if (((page * limit) > foodsLength) && (page * limit) - foodsLength > limit) {
             return res.status(400).json({error: true, message: 'Invalid page'})
         }
