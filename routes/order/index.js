@@ -18,7 +18,7 @@ router.post('/', async (req, res, next) => {
             const isFoodQuantity = await Food.findOne({
                 _id: foodItem.foodItem,
                 inventory: {$gte: foodItem.itemCount}
-            }).session(session);
+            });
             console.log('isFoodQuantity', isFoodQuantity);
             if (!isFoodQuantity) throw new Error('one of the food item out of stock');
             await Food.findOneAndUpdate({
@@ -28,7 +28,7 @@ router.post('/', async (req, res, next) => {
                 $inc: {
                     inventory: -foodItem.itemCount,
                 }
-            })
+            }), {session}
         })))
         if (isValid) {
             const order = new Order({
