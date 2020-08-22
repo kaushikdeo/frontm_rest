@@ -14,7 +14,7 @@ const db = mongoose.connection;
 try {
     db.once('open', async () => {
         if (await Food.countDocuments().exec() > 0) return
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 600; i++) {
             Food.create({
                 itemName: `Food ${i}`,
                 cusineType: i%5 === 0 ? 'continental' : 'indian',

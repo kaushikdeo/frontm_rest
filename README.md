@@ -7,7 +7,7 @@ npm start
 
 ## GET request to obtain list of products
 ```
-http://localhost:3000/api/foods?page=1&limit=5&sortBy=itemName&orderBy=1&costMin=100&costMax=1000&filter=dosa
+http://localhost:3000/api/foods?page=1&limit=5&sortBy=itemName&orderBy=1&costMin=100&costMax=1000&filter=1
 ```
 
 ## POST request to place a order
@@ -15,15 +15,15 @@ json
 ```
 [
 	{
-		"foodItem": "5f406baef3d87610ed2f9419",
+		"foodItem": "5f408863a0f70d1c21585e12",
 		"itemCount": 1
 	},
 	{
-		"foodItem": "5f3ef9340c0e9f70246e8de0",
+		"foodItem": "5f408863a0f70d1c21585e11",
 		"itemCount": 1
 	},
 	{
-		"foodItem": "5f3ef74a1bd4da6fc4d94a91",
+		"foodItem": "5f408863a0f70d1c21585e13",
 		"itemCount": 1
 	}
 ]
