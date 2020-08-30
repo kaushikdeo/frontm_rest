@@ -29,7 +29,6 @@ router.get('/', async (req, res, next) => {
                 itemName: new RegExp(filterString, 'i')
             }
         }
-        console.log('filterQuery', filterQuery);
         const foodsLength = await Food.countDocuments(filterQuery);
         if (((page * limit) > foodsLength) && (page * limit) - foodsLength > limit) {
             return res.status(400).json({error: true, message: 'Invalid page'})
